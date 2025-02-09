@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from fast_zero.schemas import (
     Message,
@@ -36,6 +36,28 @@ def read_users():
     return {'users': database}
 
 
-@app.put('/users/{user_id}', response_class=UserPublic)
-def update_user(usar_id: int, user: UserSchema):
-    pass
+@app.get('/users/{user_id}', response_model=UserPublic)
+def get_user(user_id: int):
+    if user_id < 1 or user_id > len(database):
+        raise HTTPException(status_code=404, detail='User Not Found')
+
+    user_with_id = database[user_id - 1]
+    return user_with_id
+
+
+@app.put('/users/{user_id}', response_model=UserPublic)
+def update_user(user_id: int, user: UserSchema):
+    if user_id < 1 or user_id > len(database):
+        raise HTTPException(status_code=404, detail='User Not Found')
+
+    user_with_id = UserDB(id=user_id, **user.model_dump())
+    database[user_id - 1] = user_with_id
+    return user_with_id
+
+
+@app.delete('/users/{user_id}', response_model=Message)
+def delet_user(user_id: int):
+    if user_id < 1 or user_id > len(database):
+        raise HTTPException(status_code=404, detail='User Not Found')
+    del database[user_id - 1]
+    return {'message': 'User deleted'}
