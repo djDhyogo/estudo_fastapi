@@ -131,6 +131,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.DS_Store
+
 
 # Spyder project settings
 .spyderproject
@@ -177,3 +179,4 @@ pyrightconfig.json
 
 # Generated using ignr.py - github.com/Antrikshy/ignr.py
 
+database.db

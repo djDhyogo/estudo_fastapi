@@ -10,6 +10,8 @@ python = "3.12.*" # ou "3.11.*"
 fastapi = {extras = ["standard"], version = "^0.115.8"}
 sqlalchemy = "2.0.31"
 uvicorn = "^0.34.0"
+pydantic-settings = "2.3.4"
+alembic = "1.13.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
