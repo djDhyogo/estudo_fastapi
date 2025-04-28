@@ -36,12 +36,12 @@ def create_user(user: UserSchema, session: Session = Depends(get_session)):
         if db_user.username == user.username:
             raise HTTPException(
                 status_code=HTTPStatus.CONFLICT,
-                detail='Username already exists',
+                detail='Usuario ja existe no banco de dados',
             )
         elif db_user.email == user.email:
             raise HTTPException(
                 status_code=HTTPStatus.CONFLICT,
-                detail='Email already exists',
+                detail='Email ja existe no banco de dados',
             )
 
     hashed_password = get_password_hash(user.password)
@@ -90,7 +90,7 @@ def update_user(
     except IntegrityError:
         raise HTTPException(
             status_code=HTTPStatus.CONFLICT,
-            detail='Username or Email already exists',
+            detail='Usuario ja existe no banco de dados',
         )
 
 

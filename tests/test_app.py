@@ -65,7 +65,9 @@ def test_create_user_should_return_409_email_exists__exercicio(
             'password': 'string',
         },
     )
-    assert response.json() == ({'detail': 'Email ja existe no banco de dados'})
+    assert response.json() == ({
+        'detail': 'Usuario ja existe no banco de dados'
+    })
     assert response.status_code == HTTPStatus.CONFLICT
 
 
@@ -83,7 +85,7 @@ def test_read_users_with_user(client: TestClient, user: User):
 
 
 def test_get_users(client: TestClient, user: User):
-    response = client.get('/users/1')
+    response = client.get('/users/?skip=0&limit=100')
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
         'id': user.id,
@@ -133,14 +135,14 @@ def test_update_integrity_error(client: TestClient, user: User, token: str):
         },
     )
     response_update = client.put(
-    f'/users/{user.id}',
-    headers={'Authorization': f'Bearer {token}'},
-    json={
-        'username': user.username,  # conflito proposital
-        'email': user.email,
-        'password': 'mynewpassword',
-    },
-)
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'username': user.username,  # conflito proposital
+            'email': user.email,
+            'password': 'mynewpassword',
+        },
+    )
 
     assert response_update.status_code == HTTPStatus.CONFLICT
 
